@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="description" content="Welcome to Virus Simulator! This is a simple interactive web application that simulates the spread of virus.">
+    <meta name="keywords" content="Virus,Processing,animation,JavaScript">
+    <meta name="author" content="Ziyi Zhu">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="shortcut icon" href="public/images/favicon.png"/>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Virus Simulator</title>
+  </head>
+  <body>
+    <header>
+      <div class="navbar navbar-expand-xl navbar-light bg-light">
+        <a class="navbar-brand" href="/">Virus Simulator</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDiv" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarDiv">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" id="simulate" href="#">Simulate<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" id="pause" href="#">Pause</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" id="analyze" href="#">Analyze</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="speedText" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Speed: Fast
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item speed" id="30" href="#">Fast</a>
+                <a class="dropdown-item speed" id="15" href="#">Average</a>
+                <a class="dropdown-item speed" id="5" href="#">Slow</a>
+              </div>
+            </li>
+          </ul>
+          <div class="nav-link">
+            <img width="20" src="public/images/svg/cardiogram.svg" alt="icon name">
+            <a class="count text-secondary" id="0">Healthy: 5000</a>
+          </div>
+          <div class="nav-link">
+            <img width="20" src="public/images/svg/pill.svg" alt="icon name">
+            <a class="count text-warning" id="1">Infected: 0</a>
+          </div>
+          <div class="nav-link">
+            <img width="20" src="public/images/svg/notepad.svg" alt="icon name">
+            <a class="count text-danger" id="2">Confirmed: 0</a>
+          </div>
+          <div class="nav-link">
+            <img width="20" src="public/images/svg/pharmacy.svg" alt="icon name">
+            <a class="count text-dark" id="3">Dead: 0</a>
+          </div>
+          <div class="nav-link">
+            <img width="20" src="public/images/svg/protection.svg" alt="icon name">
+            <a class="count text-primary" id="4">Recovered: 0</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main role="main" class="p-3">
+      <div class="px-1 mb-3">
+        <div class="progress">
+          <div class="progress-bar bg-warning" role="progressbar" id="1" style="width: 0%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-danger" role="progressbar" id="2" style="width: 0%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-dark" role="progressbar" id="3" style="width: 0%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-primary" role="progressbar" id="4" style="width: 0%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-8">
+          <div id="sketch-holder">
+            <!-- Our sketch will go here! -->
+          </div>
+        </div>
+        <aside class="col-md-4">
+          <div class="p-4 mb-3 bg-light rounded">
+            <form id="target">
+              <fieldset>
+                <legend>Herd settings</legend>
+                <div class="form-group">
+                  <label class="col-form-label" for="inputDefault">Population size</label>
+                  <input type="number" class="form-control" value="5000" min="100" max="9999" id="inputSize">
+                </div>
+                <div class="form-group">
+                  <label for="distancingSelect">Social distancing</label>
+                  <select class="form-control" id="distancingSelect">
+                    <option value="0">None</option>
+                    <option value="1">Low</option>
+                    <option value="2" selected>Moderate</option>
+                    <option value="3">High</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="distributionSelect">Distribution</label>
+                  <select class="form-control" id="distributionSelect">
+                    <option value="gaussian" selected>Gaussian distribution</option>
+                    <option value="random">Random distribution</option>
+                    <option value="grid">Grid distribution</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" id="isolation" value="" checked="">
+                      Self isolation
+                    </label>
+                  </div>
+                </div>
+                <fieldset class="form-group">
+                  <legend>Virus settings</legend>
+                  <label for="infectivity">Infection rate</label>
+                  <input type="range" class="custom-range" id="infectivity" value ="20">
+                  <label for="fatality">Fatality rate</label>
+                  <input type="range" class="custom-range" id="fatality" value ="5">
+                </fieldset>
+                <div class="form-group">
+                  <label for="incubationSelect">Incubation period</label>
+                  <select class="form-control" id="incubationSelect">
+                    <option>0</option>
+                    <option>1</option>
+                    <option selected>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>15</option>
+                    <option>30</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="recoverySelect">Recovery period</label>
+                  <select class="form-control" id="recoverySelect">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option selected>5</option>
+                    <option>10</option>
+                    <option>15</option>
+                    <option>30</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" id="immunity" value="" checked="">
+                      Enable immunity
+                    </label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Apply</button>
+                <button type="reset" class="btn btn-secondary">Reset</button>
+              </fieldset>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <div class="modal fade" id="tutorial">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Welcome to Virus Simulator</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="p-4">
+              <h4 class="font-italic">Set properties</h4>
+              <p class="mb-0">Choose appropriate settings for the herd and the virus properties and click "Apply" to save changes.</p>
+            </div>
+            <div class="p-4">
+              <h4 class="font-italic">Start simulation</h4>
+              <p class="mb-0">Choose a simulation speed and click "Simulate" to start the simulation.</p>
+            </div>
+            <div class="p-4">
+              <h4 class="font-italic">Start infection</h4>
+              <p class="mb-0">Click on the canvas to start the infection. Note that multiple infections can be initiated during the simulation.</p>
+            </div>
+            <div class="p-4">
+              <h4 class="font-italic">Analyze results</h4>
+              <p class="mb-0">Wait for the simulation to run. Click "Pause" to stop the simulation and click "Analyze" to plot the results.</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="analysis">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Analysis</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="plot"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.1/p5.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="public/browser/quadtree.js"></script>
+    <script src="public/browser/simulation.js"></script>
+    <script src="public/browser/sketch.js"></script>
+    <script src="public/browser/plot.js"></script>
+  </body>
+</html>

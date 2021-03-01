@@ -1,0 +1,22 @@
+{
+  "name": "virus-simulator",
+  "version": "1.0.0",
+  "description": "Interactive simulation for the spread of virus.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ziyi-zhu/virus-simulator.git"
+  },
+  "author": "Ziyi Zhu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ziyi-zhu/virus-simulator/issues"
+  },
+  "homepage": "https://github.com/ziyi-zhu/virus-simulator#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
