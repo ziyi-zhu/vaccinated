@@ -35,15 +35,18 @@ $("#tutorial").modal("show");
 
 $("#simulate").click(function() {
   paused = false;
+  $('html, body').css('overflow','hidden');
   $("#pause").removeClass("disabled");
   $("#simulate").addClass("disabled");
 });
 
 $("#pause").click(function() {
   if (paused) {
+    $('html, body').css('overflow','hidden');
     $("#pause").text("Pause");
     $("#analyze").addClass("disabled");
   } else {
+    $('html, body').css('overflow','visible');
     $("#pause").text("Resume");
     $("#analyze").removeClass("disabled");
   }
