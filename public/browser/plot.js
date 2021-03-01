@@ -34,7 +34,7 @@ $("#analyze").click(function() {
   var trace4 = {
     x: plot.x,
     y: plot[4],
-    name: "Recovered",
+    name: "Immune",
     mode: "lines",
     line: {width: 0.5, color: "#007bff"},
     type: "scatter",

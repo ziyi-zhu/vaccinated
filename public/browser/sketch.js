@@ -1,5 +1,5 @@
 const colour = ["#c6c9cc", "#ffc107", "#dc3545", "#343a40", "#007bff"];
-const status = ["Healthy", "Infected", "Confirmed", "Dead", "Recovered"];
+const status = ["Healthy", "Infected", "Confirmed", "Dead", "Immune"];
 
 let canvas;
 let herd;
@@ -20,6 +20,9 @@ let virus;
 
 let paused = true;
 let timer = 0;
+
+let money = 100000;
+let vaccinePrice = 100;
 
 let x = 0;
 var plot = {
@@ -168,20 +171,43 @@ function draw() {
         }
       }
     }
-    let range = new Circle(mouseX, mouseY, 10);
-    selected = qtree.query(range);
+    vaccinate(qtree)
 
-    if (selected && mouseIsPressed) {
-      for (let p of selected) {
-        if (p.userData.status == 0) {
-          p.userData.status = 4;
-          p.userData.virus = virus;
-        }
-      }
+    if (random(1) < 0.05) {
+      startInfection(qtree);
     }
   }
   background('white');
   herd.display();
+}
+
+function vaccinate(qtree) {
+  let range = new Circle(mouseX, mouseY, 10);
+  selected = qtree.query(range);
+
+  if (selected && mouseIsPressed) {
+    for (let p of selected) {
+      if (p.userData.status == 0 && money > vaccinePrice) {
+        p.userData.status = 4;
+        p.userData.virus = virus;
+        money -= vaccinePrice;
+      }
+    }
+  }
+}
+
+function startInfection(qtree) {
+  let range = new Circle(floor(random(width)), floor(random(height)), 10);
+  selected = qtree.query(range);
+
+  if (selected) {
+    for (let p of selected) {
+      if (p.userData.status == 0) {
+        p.userData.status = 1;
+        p.userData.virus = virus;
+      }
+    }
+  }
 }
 
 function keyPressed() {
@@ -197,12 +223,34 @@ document.oncontextmenu = function() {
     return false;
 }
 
+function abbreviateNumber(num, fixed) {
+  if (num === null) { return null; } // terminate early
+  if (num === 0) { return '0'; } // terminate early
+  fixed = (!fixed || fixed < 0) ? 0 : fixed; // number of decimal places to show
+  var b = (num).toPrecision(2).split("e"), // get power
+    k = b.length === 1 ? 0 : Math.floor(Math.min(b[1].slice(1), 14) / 3), // floor at decimals, ceiling at trillions
+    c = k < 1 ? num.toFixed(0 + fixed) : (num / Math.pow(10, k * 3) ).toFixed(1 + fixed), // divide by power
+    d = c < 0 ? c : Math.abs(c), // enforce -0 is 0
+    e = d + ['', 'K', 'M', 'B', 'T'][k]; // append power
+  return e;
+}
+
+function calculateCashFlow(count) {
+
+  let income = (count[0] + count[4])/(10*(1+socialDistancing));
+  let loss = count[2]/10;
+  return Math.floor(income - loss);
+}
+
 function updateProgress(count) {
   let total = count[0] + count[1] + count[2] + count[3] + count[4];
   for (let i = 0; i < 5; i++) {
     $(`#${i}.progress-bar`).css("width", `${Math.ceil(count[i] / total * 100)}%`);
-    $(`#${i}.count`).text(`${status[i]}: ${count[i]}`);
+    $(`#${i}.count`).text(`${status[i]}: ${abbreviateNumber(count[i], 0)}`);
   }
+
+  money += calculateCashFlow(count);
+  $(`#money`).text(`Money: ${abbreviateNumber(money, 0)}`);
 }
 
 function updatePlot(count) {
