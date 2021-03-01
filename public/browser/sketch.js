@@ -14,7 +14,7 @@ let infectivity = 0.2;
 let fatality = 0.05;
 let incubationPeriod = 2;
 let recoveryPeriod = 5;
-let immunity = true;
+let immunityPeriod = 10;
 
 let virus;
 
@@ -74,15 +74,15 @@ $("#target").submit(function(event) {
   distribution = $("#distributionSelect").children("option:selected").val();
   incubationPeriod = $("#incubationSelect").children("option:selected").val();
   recoveryPeriod = $("#recoverySelect").children("option:selected").val();
+  immunityPeriod = $("#immunitySelect").children("option:selected").val();
 
   infectivity = $('#infectivity').val() / 100;
   fatality = $('#fatality').val() / 100;
 
   isolation = $('#isolation').is(":checked");
-  immunity = $('#immunity').is(":checked");
 
   herd = new Herd(population, socialDistancing, distribution, isolation, width, height);
-  virus = new Virus(infectivity, fatality, incubationPeriod, recoveryPeriod, immunity);
+  virus = new Virus(infectivity, fatality, incubationPeriod, recoveryPeriod, immunityPeriod);
 
   $("#pause").text("Pause");
   $("#pause").addClass("disabled");
@@ -112,7 +112,7 @@ function setup() {
   background('white');
 
   herd = new Herd(population, socialDistancing, distribution, isolation, width, height);
-  virus = new Virus(infectivity, fatality, incubationPeriod, recoveryPeriod, immunity);
+  virus = new Virus(infectivity, fatality, incubationPeriod, recoveryPeriod, immunityPeriod);
 
   frameRate(30);
 }
@@ -167,18 +167,31 @@ function draw() {
     }
     let range = new Circle(mouseX, mouseY, 10);
     selected = qtree.query(range);
+
+    if (selected && mouseIsPressed) {
+      for (let p of selected) {
+        if (p.userData.status == 0) {
+          p.userData.status = 4;
+          p.userData.virus = virus;
+        }
+      }
+    }
   }
   background('white');
   herd.display();
 }
 
-function mouseClicked() {
+function keyPressed() {
   if (selected) {
     for (let p of selected) {
       p.userData.status = 1;
       p.userData.virus = virus;
     }
   }
+}
+
+document.oncontextmenu = function() {
+    return false;
 }
 
 function updateProgress(count) {

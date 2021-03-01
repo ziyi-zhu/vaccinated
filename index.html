@@ -3,7 +3,7 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="description" content="Welcome to Virus Simulator! This is a simple interactive web application that simulates the spread of virus.">
+    <meta name="description" content="Welcome to Vaccinated! This is a simple interactive web application that simulates the spread of virus.">
     <meta name="keywords" content="Virus,Processing,animation,JavaScript">
     <meta name="author" content="Ziyi Zhu">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,12 +13,12 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-    <title>Virus Simulator</title>
+    <title>Vaccinated</title>
   </head>
   <body>
     <header>
       <div class="navbar navbar-expand-xl navbar-light bg-light">
-        <a class="navbar-brand" href="/">Virus Simulator</a>
+        <a class="navbar-brand" href="/">Vaccinated</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDiv" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -153,12 +153,15 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" id="immunity" value="" checked="">
-                      Enable immunity
-                    </label>
-                  </div>
+                  <label for="immunitySelect">Immunity period</label>
+                  <select class="form-control" id="immunitySelect">
+                    <option>0</option>
+                    <option>5</option>
+                    <option selected>10</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>60</option>
+                  </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Apply</button>
                 <button type="reset" class="btn btn-secondary">Reset</button>
@@ -173,7 +176,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Welcome to Virus Simulator</h5>
+            <h5 class="modal-title">Welcome to Vaccinated</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>

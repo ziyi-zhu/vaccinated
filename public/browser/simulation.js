@@ -56,9 +56,17 @@ class Human {
       if (this.timer > this.virus.recoveryPeriod * 30) {
         if (random(1) < this.virus.fatality) {
           this.status = 3;
-        } else {
+        } else if (immunityPeriod > 0) {
           this.status = 4;
+        } else {
+          this.status = 0;
         }    
+        this.timer = 0;
+      } 
+    } else if (this.status == 4) {
+      this.timer++;
+      if (this.timer > this.virus.immunityPeriod * 30) {
+        this.status = 0;
         this.timer = 0;
       }
     }
@@ -72,12 +80,12 @@ class Human {
 }
 
 class Virus {
-  constructor(infectivity, fatality, incubationPeriod, recoveryPeriod, immunity) {
+  constructor(infectivity, fatality, incubationPeriod, recoveryPeriod, immunityPeriod) {
     this.infectivity = infectivity;
     this.fatality = fatality;
     this.incubationPeriod = incubationPeriod;
     this.recoveryPeriod = recoveryPeriod;
-    this.immunity = immunity;
+    this.immunityPeriod = immunityPeriod;
   }
 }
 
