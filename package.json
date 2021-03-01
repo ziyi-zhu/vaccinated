@@ -1,5 +1,5 @@
 {
-  "name": "virus-simulator",
+  "name": "vaccinated",
   "version": "1.0.0",
   "description": "Interactive simulation for the spread of virus.",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ziyi-zhu/virus-simulator.git"
+    "url": "git+https://github.com/ziyi-zhu/vaccinated.git"
   },
   "author": "Ziyi Zhu",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ziyi-zhu/virus-simulator/issues"
+    "url": "https://github.com/ziyi-zhu/vaccinated/issues"
   },
-  "homepage": "https://github.com/ziyi-zhu/virus-simulator#readme",
+  "homepage": "https://github.com/ziyi-zhu/vaccinated#readme",
   "dependencies": {
     "express": "^4.17.1"
   }
