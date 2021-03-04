@@ -21,11 +21,13 @@ let virus;
 let paused = true;
 let timer = 0;
 
-let money = 100000;
-let vaccinePrice = 100;
+let days = 0;
+
+let score = 0;
+let vaccinePrice = 1;
 
 let x = 0;
-var plot = {
+var data = {
   x: [],
   0: [],
   1: [],
@@ -72,6 +74,13 @@ $(".speed").click(function(event) {
   }
 });
 
+$("#analyze").click(function() {
+  plotData();
+
+  $("#analysisTitle").text(`Analysis - Day ${days}`);
+  $("#analysis").modal("show");
+});
+
 $("#target").submit(function(event) {
   event.preventDefault()
 
@@ -97,16 +106,17 @@ $("#target").submit(function(event) {
   $("#simulate").removeClass("disabled");
   $("#analyze").addClass("disabled");
 
-  count = [population, 0, 0, 0, 0];
-  updateProgress(count);
-
   x = 0;
-  plot = {x: [], 0: [], 1: [], 2: [], 3: [], 4: []};
+  score = 0;
+  days = 0;
+
+  count = [population, 0, 0, 0, 0];
+  data = {x: [], 0: [], 1: [], 2: [], 3: [], 4: []};
 });
 
 function setup() {
   if (windowWidth < 750) {
-    canvas = createCanvas(windowWidth - 50, windowHeight - 150);
+    canvas = createCanvas(windowWidth - 50, windowHeight - 120);
     population = 1000;
     $("#inputSize").val("1000");
   } else {
@@ -151,8 +161,12 @@ function draw() {
     updateProgress(count);
 
     if (timer > 30) {
-      updatePlot(count);
+      updateData(count);
       timer = 0;
+      days++;
+      if (days >= 100) {
+        endGame();
+      }
     } else {
       timer++;
     }
@@ -187,10 +201,10 @@ function vaccinate(qtree) {
 
   if (selected && mouseIsPressed) {
     for (let p of selected) {
-      if (p.userData.status == 0 && money > vaccinePrice) {
+      if (p.userData.status == 0 && score > vaccinePrice) {
         p.userData.status = 4;
         p.userData.virus = virus;
-        money -= vaccinePrice;
+        score -= vaccinePrice;
       }
     }
   }
@@ -223,40 +237,53 @@ document.oncontextmenu = function() {
     return false;
 }
 
-function abbreviateNumber(num, fixed) {
-  if (num === null) { return null; } // terminate early
-  if (num === 0) { return '0'; } // terminate early
-  fixed = (!fixed || fixed < 0) ? 0 : fixed; // number of decimal places to show
-  var b = (num).toPrecision(2).split("e"), // get power
-    k = b.length === 1 ? 0 : Math.floor(Math.min(b[1].slice(1), 14) / 3), // floor at decimals, ceiling at trillions
-    c = k < 1 ? num.toFixed(0 + fixed) : (num / Math.pow(10, k * 3) ).toFixed(1 + fixed), // divide by power
-    d = c < 0 ? c : Math.abs(c), // enforce -0 is 0
-    e = d + ['', 'K', 'M', 'B', 'T'][k]; // append power
-  return e;
+function calculateCashFlow(count) {
+  let income = (count[0] + count[4])/(1000*(1+socialDistancing));
+  let loss = count[2]/1000;
+  return income - loss;
 }
 
-function calculateCashFlow(count) {
+function endGame() {
+  paused = true;
+  plotData();
 
-  let income = (count[0] + count[4])/(10*(1+socialDistancing));
-  let loss = count[2]/10;
-  return Math.floor(income - loss);
+  $("#pause").addClass("disabled");
+  $("#analyze").removeClass("disabled");
+
+  $("#days").text(`${days}`);
+  $("#result").text(`${Math.ceil(score)}`);
+
+  if (score > 0) {
+    $("#summaryTitle").text("Congratulations!");
+  } else {
+    $("#summaryTitle").text("Game over!");
+  }
+
+  $("#summary").modal("show");
+  $('html, body').css('overflow','visible');
 }
 
 function updateProgress(count) {
   let total = count[0] + count[1] + count[2] + count[3] + count[4];
   for (let i = 0; i < 5; i++) {
     $(`#${i}.progress-bar`).css("width", `${Math.ceil(count[i] / total * 100)}%`);
-    $(`#${i}.count`).text(`${status[i]}: ${abbreviateNumber(count[i], 0)}`);
+    $(`#${i}.count`).text(`${status[i]}: ${count[i]}`);
   }
 
-  money += calculateCashFlow(count);
-  $(`#money`).text(`Money: ${abbreviateNumber(money, 0)}`);
+  score += calculateCashFlow(count);
+
+  if (score < 0) {
+    score = 0;
+    endGame();
+  }
+  
+  $(`#score`).text(`Score: ${Math.floor(score)}`);
 }
 
-function updatePlot(count) {
-  plot.x.push(x);
+function updateData(count) {
+  data.x.push(x);
   for (let i = 0; i < 5; i++) {
-    plot[i].push(count[i]);
+    data[i].push(count[i]);
   }
   x++;
 }

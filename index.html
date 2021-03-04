@@ -3,7 +3,7 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="description" content="Welcome to Vaccinated! This is a simple interactive web application that simulates the spread of virus.">
+    <meta name="description" content="Welcome to Vaccinated!! This is a simple interactive web application that simulates the spread of virus.">
     <meta name="keywords" content="Virus,Processing,animation,JavaScript">
     <meta name="author" content="Ziyi Zhu">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,14 +13,12 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="public/style/main.css">
-
-    <title>Vaccinated</title>
+    <title>Vaccinated!</title>
   </head>
   <body>
     <header>
       <div class="navbar navbar-expand-xl navbar-light bg-light">
-        <a class="navbar-brand" href="/">Vaccinated</a>
+        <a class="navbar-brand" href="/">Vaccinated!</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDiv" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -33,7 +31,7 @@
               <a class="nav-link disabled" id="pause" href="#">Pause</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled" id="analyze" href="#">Analyze</a>
+              <a class="nav-link disabled" id="analyze" href="#">Analysis</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" id="speedText" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -46,29 +44,29 @@
               </div>
             </li>
           </ul>
-          <div class="nav-link ui">
+          <div class="nav-link">
             <img width="20" src="public/images/svg/cardiogram.svg" alt="icon name">
             <a class="count text-secondary" id="0">Healthy: 0</a>
           </div>
-          <div class="nav-link ui">
+          <div class="nav-link">
             <img width="20" src="public/images/svg/pill.svg" alt="icon name">
             <a class="count text-warning" id="1">Infected: 0</a>
           </div>
-          <div class="nav-link ui">
+          <div class="nav-link">
             <img width="20" src="public/images/svg/notepad.svg" alt="icon name">
             <a class="count text-danger" id="2">Confirmed: 0</a>
           </div>
-          <div class="nav-link ui">
+          <div class="nav-link">
             <img width="20" src="public/images/svg/pharmacy.svg" alt="icon name">
             <a class="count text-dark" id="3">Dead: 0</a>
           </div>
-          <div class="nav-link ui">
+          <div class="nav-link">
             <img width="20" src="public/images/svg/protection.svg" alt="icon name">
             <a class="count text-primary" id="4">Immune: 0</a>
           </div>
-          <div class="nav-link ui">
+          <div class="nav-link">
             <img width="20" src="public/images/svg/dollar.svg" alt="icon name">
-            <a class="count text-success" id="money">Money: 100K</a>
+            <a class="count text-success" id="score">Score: 0</a>
           </div>
         </div>
       </div>
@@ -86,7 +84,7 @@
       
       <div class="row">
         <div class="col-md-8">
-          <div id="sketch-holder">
+          <div id="sketch-holder" class="mb-2">
             <!-- Our sketch will go here! -->
           </div>
         </div>
@@ -182,7 +180,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Welcome to Vaccinated</h5>
+            <h5 class="modal-title">Welcome to Vaccinated!</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -197,8 +195,8 @@
               <p class="mb-0">Choose a simulation speed and click "Simulate" to start the simulation.</p>
             </div>
             <div class="p-4">
-              <h4 class="font-italic">Start infection</h4>
-              <p class="mb-0">Click on the canvas to start the infection. Note that multiple infections can be initiated during the simulation.</p>
+              <h4 class="font-italic">Start vaccination</h4>
+              <p class="mb-0">Click on the canvas to start vaccination. Note that multiple vaccinations can be initiated during the simulation.</p>
             </div>
             <div class="p-4">
               <h4 class="font-italic">Analyze results</h4>
@@ -216,13 +214,32 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Analysis</h5>
+            <h5 class="modal-title" id="analysisTitle">Analysis</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <div id="plot"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="summary">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="summaryTitle">Game over!</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Your community has survived <b id="days">0</b> days. Your final score is <b id="result">0</b>.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

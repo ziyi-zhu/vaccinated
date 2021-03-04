@@ -1,9 +1,9 @@
 let plt = document.getElementById("plot");
 
-$("#analyze").click(function() {
+function plotData() {
   var trace1 = {
-    x: plot.x,
-    y: plot[1],
+    x: data.x,
+    y: data[1],
     name: "Infected",
     mode: "lines",
     line: {width: 0.5, color: "#ffc107"},
@@ -12,8 +12,8 @@ $("#analyze").click(function() {
   };
 
   var trace2 = {
-    x: plot.x,
-    y: plot[2],
+    x: data.x,
+    y: data[2],
     name: "Confirmed",
     mode: "lines",
     line: {width: 0.5, color: "#dc3545"},
@@ -22,8 +22,8 @@ $("#analyze").click(function() {
   };
 
   var trace3 = {
-    x: plot.x,
-    y: plot[3],
+    x: data.x,
+    y: data[3],
     name: "Dead",
     mode: "lines",
     line: {width: 0.5, color: "#343a40"},
@@ -32,8 +32,8 @@ $("#analyze").click(function() {
   };
 
   var trace4 = {
-    x: plot.x,
-    y: plot[4],
+    x: data.x,
+    y: data[4],
     name: "Immune",
     mode: "lines",
     line: {width: 0.5, color: "#007bff"},
@@ -42,9 +42,6 @@ $("#analyze").click(function() {
   };
 
   var layout = {
-    title: {
-      text:'Total number of cases against time',
-    },
     xaxis: {
       title: {
         text: 'Days',
@@ -62,8 +59,5 @@ $("#analyze").click(function() {
     layout["showlegend"] = false;
   }
 
-  var data = [trace1, trace2, trace3, trace4];
-  Plotly.newPlot(plt, data, layout);
-
-  $("#analysis").modal("show");
-});
+  Plotly.newPlot(plt, [trace1, trace2, trace3, trace4], layout);
+}
